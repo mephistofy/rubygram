@@ -1,0 +1,9 @@
+<div>all posts </div>
+
+
+  <%@posts.each do |post|%>
+  <div> <%= post.id%></div>
+ <div>
+  <%= image_tag post.image_url %>
+</div>
+<%end%>

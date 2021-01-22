@@ -1,6 +1,13 @@
-<div> Succesful!</div>>
+<div> 
+  <%= @user.email%>
+</div>
   <li class="nav-item">
-    <%= link_to "Log out", sign_out_path, method: :delete, class: "nav-link text-nowrap" %>
+    <%= link_to "show my posts", my_posts_path, method: :get, class: "nav-link text-nowrap" %>
   </li>
-<%= image_tag @user.avatar_url %>
+<div>
+  <% if @user.avatar != nil%>
+  <%= image_tag @user.avatar_url %>
+  <%end%>
+</div>
+
 

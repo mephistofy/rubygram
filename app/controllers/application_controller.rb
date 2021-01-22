@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def after_sign_in_path_for(resource)
-    stored_location_for(resource) || user_index_url
+    stored_location_for(resource) || my_posts_url
   end
 
   def after_sign_out_path_for(resource)

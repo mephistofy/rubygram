@@ -8,9 +8,13 @@ Rails.application.routes.draw do
     post 'sign_in', to: 'sessions#create'
     delete 'sign_out', to: 'sessions#destroy'
     
-    resources :user do 
-    #get "main", to: "user#index" 
-    end
+    post 'new_post', to: 'post#create'
+    get 'new_post', to: 'post#new'
+    get 'my_posts', to: 'post#index'
+    get 'post/:id', to: 'post#show', as: :post
+    delete 'delete_post', to: 'post#destroy'
+    #resources :post
+    resources :user
 
     root to: 'sessions#new'
   end
