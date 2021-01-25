@@ -10,11 +10,13 @@ Rails.application.routes.draw do
     
     post 'new_post', to: 'post#create'
     get 'new_post', to: 'post#new'
-    get 'my_posts', to: 'post#index'
     get 'post/:id', to: 'post#show', as: :post
     delete 'delete_post', to: 'post#destroy'
-    #resources :post
-    resources :user
+
+    get 'search', to: 'user#index'
+    get 'user/:id', to: 'user#show', as: :user
+
+    get 'feed', to: 'feed#index'
 
     root to: 'sessions#new'
   end

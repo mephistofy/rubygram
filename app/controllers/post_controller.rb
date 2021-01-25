@@ -1,31 +1,6 @@
 class PostController < ApplicationController
   before_action :authenticate_user!
-  #before_action :get_user, only: [:index]
   before_action :get_post, only: [:show, :destroy, :get_post_likes]
-  
-  #GET all_posts
-  def index
-    @user = current_user
-    respond_to do |format|
-      format.html {
-        @posts = @user.post.all
-      }
-
-      format.json {
-        #limit == offset
-        @posts = @user.post.limit(params[:limit]).offset(params[:offset])
-        render json: {
-          posts: @posts.map { |item| {
-                                       id: item.id,
-                                       image: item.image_url,
-                                       likes_amount: item.likes.count,
-                                       #liked_by_user: item.likes.map {|like| { flag: like.user_id == current_user.id ? true : false}}
-                                     }
-                            }
-        }, status: :ok
-      }
-    end 
-  end
 
   def new
   end
@@ -107,20 +82,6 @@ class PostController < ApplicationController
   def params_for_show_destroy
     params.require(:id)
     params.permit(:id)
-  end
-
-  def get_user
-    params.require(:user_id)
-    params.require(:limit)
-    params.require(:offset)
-
-    params.permit(:user_id, :limit, :offset)
-
-    @user = User.find(params[:user_id])
-
-    if @user == nil 
-      render json: { error: 'No such user!'}, status: 404 
-    end
   end
   
   def get_post

@@ -11,8 +11,11 @@
 
   <body>
     <% if user_signed_in? %>
-  <li class="nav-item">
-    <%= link_to "my posts", my_posts_path, method: :get, class: "nav-link text-nowrap" %>
+
+    <%= link_to "my account", controller: 'user', action: 'show', id: current_user.id %>
+
+    <li class="nav-item">
+    <%= link_to "Feed", feed_path, method: :get, class: "nav-link text-nowrap" %>
   </li>
       <li class="nav-item">
     <%= link_to "create new post", new_post_path, method: :get, class: "nav-link text-nowrap" %>
@@ -20,7 +23,15 @@
   <li class="nav-item">
     <%= link_to "Log out", sign_out_path, method: :delete, class: "nav-link text-nowrap" %>
   </li>
-  
+
+<%= form_tag(search_path, method: :get) do %>
+    <%= text_field_tag(:search, params[:search])%>
+    <%= submit_tag("Search")%>
+<% end %>
+
+ <div>
+ ---------------------------------------------------------------------
+ </div> 
 
 <% end %>
     <%= yield %>

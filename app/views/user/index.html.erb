@@ -1,13 +1,16 @@
-<div> 
-  <%= @user.email%>
-</div>
+<%if @user == nil%>
+  <%@users.each do |user|%>
   <li class="nav-item">
-    <%= link_to "show my posts", my_posts_path, method: :get, class: "nav-link text-nowrap" %>
+    <%= link_to "#{user.email}", "user/#{user.id}", method: :get, class: "nav-link text-nowrap" %>
   </li>
-<div>
-  <% if @user.avatar != nil%>
-  <%= image_tag @user.avatar_url %>
-  <%end%>
-</div>
+<%end%>
+<%else%>
+  <li class="nav-item">
+    <%= link_to "#{@user.email}", "user/#{@user.id}", method: :get, class: "nav-link text-nowrap" %>
+  </li>
+<%end%>
+
+
+
 
 

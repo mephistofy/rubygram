@@ -1,0 +1,27 @@
+<div> 
+  <%= @user.email%>
+</div>
+
+<div>
+  <% if @user.avatar != nil%>
+  <%= image_tag @user.avatar_url %>
+  <%end%>
+</div>
+
+<div>
+
+</div>
+<div>
+++++++++++++++++++++++++++++++++
+</div>
+<div>all posts </div>
+
+
+  <%@posts.each do |post|%>
+  <div> <%= post.id%></div>
+ <div>
+  
+    <%= link_to (image_tag post.image_url), controller: 'post', action: 'show', id: post.id %>
+
+</div>
+<%end%>
