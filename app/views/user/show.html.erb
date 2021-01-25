@@ -9,9 +9,26 @@
 </div>
 
 <div>
+Posts:
+<%= @user.post.count%>
+Followers:
+<%= @user.followers.count%>
+Followings:
+<%= @user.following.count%> 
+</div>
 
+<div>
+<%if @user.id != current_user.id%>
+<% if current_user.following?(@user)%>
+<%= button_to 'Unsubscribe', {:controller => 'follow', :action => 'create', :user_to_be_followed_id => @user.id}, :method => :post, class: 'buttonAddMarkMainPage' %>
+
+<%else%>
+<%= button_to 'Subscribe', {:controller => 'follow', :action => 'create', :user_to_be_followed_id => @user.id}, :method => :post, class: 'buttonAddMarkMainPage' %>
+<%end%>
+<%end%>
 </div>
 <div>
+
 ++++++++++++++++++++++++++++++++
 </div>
 <div>all posts </div>

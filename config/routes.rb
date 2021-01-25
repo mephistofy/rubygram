@@ -23,6 +23,8 @@ Rails.application.routes.draw do
     put "update_comment", to: "comment#update"
     get "update_comment/:comment_id", to: "comment#show"
 
+    post "follow", to: "follow#create"
+
     root to: 'sessions#new'
   end
 end

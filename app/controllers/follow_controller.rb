@@ -3,8 +3,17 @@ class FollowController < ApplicationController
   before_action :find_user
     
   def create
-    if current_user.id == @user.id 
-      render json: { error: 'You cannot follow/unfollow yourself !'}, status: :bad_request
+    if current_user.id == @user.id
+      @error = 'You cannot follow/unfollow yourself!' 
+      respond_to do |format|
+          format.html {
+            redirect_to controller: 'user', action: 'show', id: @user.id, error: @error
+          }
+
+          format.json {
+            render json: { error: @error }, status: :bad_request
+          }
+      end
     else
       if current_user.following?(@user)
         current_user.unfollow(@user)
@@ -22,20 +31,37 @@ class FollowController < ApplicationController
 
   private
   def render_message(status)
-    if status == true 
-      render json: {},status: :ok
+    if status == true
+      respond_to do |format|
+          format.html {
+            redirect_to controller: 'user', action: 'show', id: @user.id
+          }
+
+          format.json {
+            render json: {},status: :ok
+          }
+      end 
 
     else
-      render json: { error: 'operation failed' },status: 500
+      @error = 'Operation failed'
 
+      respond_to do |format|
+        format.html {
+          redirect_to controller: 'user', action: 'show', id: @user.id, error: @error
+        }
+
+        format.json {
+          render json: { error: @error },status: 500
+        }
+      end
     end
   end
 
   def find_user
-    params.require(:user_to_be_followed)
-    params.permit(:user_to_be_followed)
+    params.require(:user_to_be_followed_id)
+    params.permit(:user_to_be_followed_id)
 
-    @user = User.find(params[:user_to_be_followed])
+    @user = User.find(params[:user_to_be_followed_id])
 
     if @user == nil
       respond_to do |format|
