@@ -1,0 +1,17 @@
+<%= form_for(:comment,url: update_comment_path, method: :put) do |f| %>
+    <%if @error != nil%>
+    <%= @error%>
+    <%end%>
+  <div class="field">
+    <%= f.label :new_comment %><br />
+    <%= f.hidden_field :comment_id, :value => @comment_id %>
+    <%= f.text_field :new_comment%>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Update comment"%>
+  </div>
+
+<% end %>
+
+

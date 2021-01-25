@@ -6,7 +6,7 @@ class PostController < ApplicationController
   end
 
   def create
-    @post = current_user.post.build(params_for_post_create)
+    @post = current_user.post.build(create_params)
 
     if @post.save!
       respond_to do |format|
@@ -35,6 +35,8 @@ class PostController < ApplicationController
 
   #GET show_post
   def show
+    @comment = @post.comment.all.order(created_at: :asc)
+
     respond_to do |format|
       format.html{}
 
@@ -75,17 +77,18 @@ class PostController < ApplicationController
   end
   
   private 
-  def params_for_post_create
+  def create_params
     params.require(:post).permit(:image)
   end
 
-  def params_for_show_destroy
+  def show_destroy_params
     params.require(:id)
     params.permit(:id)
   end
+
   
   def get_post
-    @post = Post.find(params_for_show_destroy[:id])
+    @post = Post.find(show_destroy_params[:id])
 
     if @post == nil
       @error = 'Post not found'
