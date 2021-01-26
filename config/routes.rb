@@ -18,12 +18,14 @@ Rails.application.routes.draw do
 
     get 'feed', to: 'feed#index'
 
-    post "create_comment", to: "comment#create"
-    delete "delete_comment", to: "comment#destroy"
-    put "update_comment", to: "comment#update"
-    get "update_comment/:comment_id", to: "comment#show"
+    post 'create_comment', to: 'comment#create'
+    delete 'delete_comment', to: 'comment#destroy'
+    put 'update_comment', to: 'comment#update'
+    get 'update_comment/:comment_id', to: 'comment#show'
 
-    post "follow", to: "follow#create"
+    post 'follow', to: 'follow#create'
+
+    post 'like', to: 'like#create'
 
     root to: 'sessions#new'
   end

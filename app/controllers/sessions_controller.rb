@@ -10,7 +10,7 @@ class SessionsController < Devise::SessionsController
       
       respond_to do |format| 
         format.html {
-          redirect_to my_posts_url
+          redirect_to feed_url
         }
         format.json {
           render json: { email: @user.email, id: @user.id }, status: :created

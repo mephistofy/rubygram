@@ -37,6 +37,9 @@ class PostController < ApplicationController
   def show
     @comment = @post.comment.all.order(created_at: :asc)
 
+    @like = Like.find_by(post_id: params[:id], user_id: current_user.id)
+
+    @likes_count = @post.likes.count
     respond_to do |format|
       format.html{}
 

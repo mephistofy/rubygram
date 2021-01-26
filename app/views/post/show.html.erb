@@ -1,3 +1,13 @@
+<html>
+
+<head>
+  <title></title>
+
+
+
+</head>
+
+<body>
 <div>
 <%@post.id%>
 </div>
@@ -9,6 +19,16 @@
 <%=params[:error]%>
 <%end%>
 
+<%if @like != nil%>
+<div>
+Liked by current user
+</div>
+<%end%>
+<%= button_to 'Like', {:controller => 'like', :action => 'create', :post_id => @post.id}, :method => :post, class: 'buttonAddMarkMainPage' %>
+<div>
+Likes:
+<%=@likes_count%>
+</div>
 <%= form_for :comment_form, :url => {:controller => :comment, :action => :create} do |f| %>
     <%if @error != nil%>
     <%= @error%>
@@ -40,3 +60,7 @@
 <%end%>
 </div>
 
+
+
+</body>
+</html>

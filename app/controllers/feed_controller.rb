@@ -7,6 +7,8 @@ class FeedController < ApplicationController
     respond_to do |format|
         format.html {
           @followings_posts = Post.where("user_id IN (?)", followings).order(created_at: :desc)
+
+          @owners = @followings_posts.map {|post| User.find(post.user_id)}
         }
 
         format.json {
