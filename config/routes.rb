@@ -14,16 +14,18 @@ Rails.application.routes.draw do
     delete 'delete_post', to: 'post#destroy'
 
     get 'search', to: 'user#index'
-    get 'user/:id', to: 'user#show', as: :user
+    get 'user/:user_id', to: 'user#show', as: :user
 
     get 'feed', to: 'feed#index'
 
+    get 'all_comments', to: 'comment#index'
     post 'create_comment', to: 'comment#create'
     delete 'delete_comment', to: 'comment#destroy'
     put 'update_comment', to: 'comment#update'
     get 'update_comment/:comment_id', to: 'comment#show'
 
     post 'follow', to: 'follow#create'
+    get 'user/:user_id/:method', to: 'follow#index'
 
     post 'like', to: 'like#create'
 

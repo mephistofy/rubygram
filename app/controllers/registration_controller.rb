@@ -5,30 +5,32 @@ class RegistrationController < ApplicationController
   end
   # POST /sign_up
   def create
-      user = User.new(get_registration_params)
+    user = User.new(get_registration_params)
 
-      if user.save!
-        respond_to do |format|
-            format.html {
-              redirect_to sign_in_path
-            }
-            format.json {
-              render json:{}, status: :created
-            }
-        end
-      else
-        @error = 'Internal Server Error'
+    if user.save
+      action = redirect_to sign_in_path
+      data = nil
 
-        respond_to do |format|
-            format.html {
-              render 'new'
-            }
-            format.json {
-              render json: { error: @error }, status: 500
-            }
-        end
+      succesful_response(:created, action, data)
+    else
+      @error = user.errors.full_messages
+      action = render 'new'
 
-      end
+      failed_response(@error, 500, action)
+        
+    end
+  end
+
+  def update
+    respond_to do |format|
+      format.html {
+        
+      }
+
+      format.json {
+
+      }
+    end
   end
    
   private
@@ -36,20 +38,20 @@ class RegistrationController < ApplicationController
     params.require(:user).permit(:email, :password, :password_confirmation, :avatar)
   end
 
+  def update_params_html
+  end
+
+  def update_params_json
+  end
+
   def user_exist?
     @user = User.find_by(email: params[:email])
 
     if @user != nil
       @error = 'User already exists!'
+      action = render 'new'
 
-      respond_to do |format|
-        format.html {
-          render 'new'
-        }
-        format.json {
-          render json: { error: @error }, status: 400
-        }
-      end
+      failed_response(@error, 400, action)
     end  
   end
 end

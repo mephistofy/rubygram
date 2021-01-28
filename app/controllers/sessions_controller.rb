@@ -8,26 +8,15 @@ class SessionsController < Devise::SessionsController
     if @user.valid_password?(sign_in_params[:password])
       sign_in "user", @user
       
-      respond_to do |format| 
-        format.html {
-          redirect_to feed_url
-        }
-        format.json {
-          render json: { email: @user.email, id: @user.id }, status: :created
-        } 
-      end
-    
-    else
-      @error =  'wrong email or password or both'
+      action = redirect_to feed_url
+      data = { email: @user.email, id: @user.id }
+      succesful_response(:created, action, data)
 
-      respond_to do |format| 
-        format.html {
-          render 'new' 
-        }
-        format.json {
-          render json: { error: @error }, status: :unauthorized
-        }
-      end
+    else
+      @error =  'Wrong email or password'
+
+      action = render 'new'
+      failed_response(@error, :unauthorized, action)
     end
   end
 
@@ -35,25 +24,20 @@ class SessionsController < Devise::SessionsController
     super
   end
 
-  private 
+  private
+
   def sign_in_params
     params.require(:user).permit(:email, :password)
   end
-
+  
   def find_user
     @user = User.find_for_database_authentication(email: sign_in_params[:email])
 
     if @user == nil
-      @error =  'wrong email/username or password or both'
+      @error =  'Wrong email or password'
 
-      respond_to do |format| 
-        format.html {
-          render 'new'
-        }
-        format.json {
-          render json: { error: @error }, status: 404 #no such user
-        } 
-      end
+      action = render 'new'
+      failed_response(@error, :unauthorized, action)
     end
   end
 end

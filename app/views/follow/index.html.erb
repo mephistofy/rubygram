@@ -19,11 +19,8 @@
         </div>
         
         <div class="w3-col s10 m4 l4 ">
-          <%if @user == nil%>
-            <%@users.each do |user|%>
-
-
-
+          <%if @result != nil%>
+            <%@result.each do |user|%>
 
               <div class="w3-row ">
                 
@@ -38,7 +35,7 @@
                 </div>
                 
                 <div class="w3-col s6 m6 l6 w3-margin-top">
-                    <%= link_to "#{user.email}", "user/#{user.id}", method: :get, class: "nav-link text-nowrap" %>
+                    <%= link_to "#{user.email}",  {:controller => 'user', :action => 'show', :user_id => user.id}, method: :get, class: "nav-link text-nowrap" %>
 
                 </div>
 
@@ -69,16 +66,5 @@
     
   </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
 
 

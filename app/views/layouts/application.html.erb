@@ -2,33 +2,47 @@
 <html>
   <head>
     <title>Rubygram</title>
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <%= stylesheet_link_tag 'application.css', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %><link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-  </head>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">  
+   <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+</head>
 
   <body>
   <% if user_signed_in? %>
-    <div class="w3-bar w3-red">
-    <div class=" w3-display-topmiddle">
-                  <%= form_tag(search_path, method: :get) do %>
-        <%= text_field_tag(:search, params[:search], class: "w3-bar-item w3-input w3-border ")%>
-        <%= submit_tag("Find User",  class: "w3-bar-item w3-button w3-green w3-border")%>
-      <% end %>
-    </div>
+    <div class="w3-bar w3-red", style="height:80px;">
+      <div class=" w3-display-topleft w3-padding-16 w3-margin-left ">
+        <%= form_tag(search_path, method: :get) do %>
+        <%= text_field_tag(:search, params[:search], placeholder:"Find user", class: "w3-bar-item w3-input w3-border w3-round-xxlarge w3-margin-right w3-hover-border-black")%>
+          <label class="btn btn-default btn-change-avatar", style="cursor:pointer;">       
+            <i class="material-icons w3-xxlarge", id="selected", style= "color: black">search</i>
+            <span style="display:none;">
+              <%= submit_tag("Find User",  class: "w3-bar-item w3-button w3-green w3-border")%>
+            </span>
+          </label>
+        <% end %>
+      </div>
 
-      <%= link_to "My account", {controller: 'user', action: 'show', id: current_user.id}, method: :get,class: "w3-bar-item w3-button" %>
-      <%= link_to "Feed", feed_path, method: :get, class: "w3-bar-item w3-button w3-hide-smal" %>
-      <%= link_to "New post", new_post_path, method: :get, class: "w3-bar-item w3-button w3-hide-smal " %>
-      <%= link_to "Log out", sign_out_path, method: :delete,  class: "w3-bar-item w3-button w3-hide-smal w3-display-topright" %>
+      <div class=" w3-display-topright w3-padding-16">
+            <%= link_to "My account", {controller: 'user', action: 'show', user_id: current_user.id}, method: :get,class: "w3-bar-item w3-button w3-hide-small" %>
+      <%= link_to "Feed", feed_path, method: :get, class: "w3-bar-item w3-button w3-hide-small" %>
+      <%= link_to "New post", new_post_path, method: :get, class: "w3-bar-item w3-button w3-hide-small " %>
+      <%= link_to "Log out", sign_out_path, method: :delete,  class: "w3-bar-item w3-button w3-hide-small" %>
   
       <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" onclick="myFunction()">&#9776;</a>
+      </div>
+
     </div>
 
     <div id="demo" class="w3-bar-block w3-red w3-hide w3-hide-large w3-hide-medium">
+      <%= link_to "My account", {controller: 'user', action: 'show', user_id: current_user.id}, method: :get,class: "w3-bar-item w3-button" %>
       <%= link_to "Feed", feed_path, method: :get, class: "w3-bar-item w3-button" %>
       <%= link_to "New post", new_post_path, method: :get, class: "w3-bar-item w3-button" %>
       <%= link_to "Log out", sign_out_path, method: :delete,  class: "w3-bar-item w3-button" %>

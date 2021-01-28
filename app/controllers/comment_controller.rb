@@ -1,103 +1,98 @@
 class CommentController < ApplicationController
   before_action :authenticate_user!
-  before_action :get_post, only: [:create]
+
+  #API GET all_comments
+  def index
+    respond_to do |format|
+      post = Post.find(index_params_json[:post_id])
+      comments = post.comment.limit(index_params_json[:limit]).offset(index_params_json[:offset])
+
+      format.json { 
+        render json: {
+          comments: comments.map {|comment| {
+            id: comment.id,
+            author:  User.find(comment.author_id).map {|user|{
+              user_id: user.id,
+              email: user.email,
+              avatar: user.avatar_url
+            }}
+          }}
+        }
+      }
+    end
+  end
 
   def show
     @comment_id = show_delete_params[:comment_id]
   end
   #POST create_comment
   def create
-    comment = @post.comment.build(author_id: current_user.id, comment: create_params_html[:comment])
-  
-    if comment.save
-      respond_to do |format|
-        format.html {
-          redirect_to controller: 'post', action: 'show', id: @post.id
-        }
+    post = Post.find(create_params_html[:post_id])
 
-        format.json {
-          render json: {}, status: :ok
-        }
+    if post != nil
+      comment = post.comment.build(author_id: current_user.id, comment: create_params_html[:comment])
+
+      if comment.save
+
+        succesful_response(:ok, action_succesfull_response(post.id), nil)
+      else
+        @error = comment.errors.full_messages
+        
+        failed_response(@error, 500, action_failed_response(post.id))
       end
-
     else
-      @error = 'Comment save failed'
+      @error = 'Post not found'
 
-      respond_to do |format|
-          format.html {
-            redirect_to controller: 'post', action: 'show', id: @post.id, error: @error
-          }
-
-          format.json {
-            render json: { error: "comment save failed " }, status: 500
-          }
-      end
+      failed_response(@error, 404, action_failed_response(post.id))
     end
   end
 
   def update
-    comment = Comment.find(update_params[:comment_id])
-
-    if comment.author_id == current_user.id
-      comment.comment = update_params[:new_comment]
-      comment.save
-   
-      respond_to do |format|
-          format.html {
-            redirect_to controller: 'post', action: 'show', id: comment.post_id
-          }
-
-          format.json {
-            render json: {}, status: :ok
-          }
-      end
-    else
-      @error = 'Only the same author that left a comment can edit it'
-
-      respond_to do |format|
-          format.html {
-            redirect_to controller: 'post', action: 'show', id: comment.post_id
-          }
-          format.json {
-            render json: { error: @error }, status: :bad_request
-          }
-      end
-    end
+    check_and('update')
   end
 
   #DELETE delete_comment
   def destroy
-    comment = Comment.find(show_delete_params[:comment_id])
-
-    if comment.author_id == current_user.id
-      comment.destroy
-     
-      respond_to do |format|
-          format.html {
-            redirect_to controller: 'post', action: 'show', id: comment.post_id
-          }
-
-          format.json {
-            render json: {}, status: :ok
-          }
-      end
-    else
-      @error = 'Only the same author that left a comment can delete it'
-      
-      respond_to do |format|
-        format.html {
-          redirect_to controller: 'post', action: 'show', id: comment.post_id
-        }
-        format.json {
-          render json: { error:  @error }, status: :bad_request
-        }
-        end
-    end
+    check_and('delete')
   end
 
-  private 
-  def get_post
-    @post = Post.find(create_params_html[:post_id])
+  private
+  def action_failed_response(id)
+    return redirect_to controller: 'post', action: 'show', id: id, error: @error
+  end
+
+  def action_succesfull_response(id)
+    return redirect_to controller: 'post', action: 'show', id: id
+  end
+
+  def check_and(method)
+    comment = (method == 'update') ? Comment.find(update_params[:comment_id]) : Comment.find(show_delete_params[:comment_id]) 
+    
+    if comment.author_id == current_user.id
+      case method
+      when 'update'
+        comment.comment = update_params[:new_comment]
+      
+        if comment.save
+          succesful_response(:ok, action_succesfull_response(comment.post_id), nil)
+        else
+          @error = comment.errors.full_messages
+          failed_response(@error, 500, action_failed_response(comment.post_id))
+        end
+      when 'delete'
+        comment.destroy
+        
+        succesful_response(:ok, action_succesfull_response(comment.post_id), nil)
+      else
+        @error = 'Undefined method'
+        failed_response(@error, 500, action_failed_response(comment.post_id))
+      end
+
+    else
+      @error = 'Only the same author that left a comment can edit it'
+
+      failed_response(@error, :bad_request, action_failed_response(comment.post_id))
+    end
   end
 
   def create_params_html
@@ -111,5 +106,13 @@ class CommentController < ApplicationController
   def show_delete_params
     params.require(:comment_id)
     params.permit(:comment_id)
+  end
+
+  def index_params_json
+    params.require(:post_id)
+    params.require(:limit)
+    params.require(:offset)
+
+    params.permit(:post_id, :limit, :offset)
   end
 end

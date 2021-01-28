@@ -8,6 +8,8 @@
 </head>
 
 <body>
+        <%= render "shared/error_messages", error: @error %>
+
 <div >
 <% if @followings_posts != nil%>
   <%post_count = 0 %>
@@ -29,9 +31,9 @@
             <div class="w3-col m2 l2 s4  w3-center ">
               <p>
                 <%if @owners[post_count].avatar_url !=  nil%>
-                  <%= link_to (image_tag(@owners[post_count].avatar_url, :size => "88x88", class:"w3-circle w3-center")), controller: 'user', action: 'show', id: @owners[post_count].id %>
+                  <%= link_to (image_tag(@owners[post_count].avatar_url, :size => "88x88", class:"w3-circle w3-center")), controller: 'user', action: 'show', user_id: @owners[post_count].id %>
                 <%else%>
-                  <%= link_to (image_tag("https://scontent-lga3-2.cdninstagram.com/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=scontent-lga3-2.cdninstagram.com&_nc_ohc=d0j1pWabatQAX91cekv&oh=e3ed292241a73c646971ca14706f2c97&oe=6038598F&ig_cache_key=YW5vbnltb3VzX3Byb2ZpbGVfcGlj.2", :size => "88x88", class:"w3-circle w3-center")), controller: 'user', action: 'show', id: @owners[post_count].id %>
+                  <%= link_to (image_tag("https://scontent-lga3-2.cdninstagram.com/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=scontent-lga3-2.cdninstagram.com&_nc_ohc=d0j1pWabatQAX91cekv&oh=e3ed292241a73c646971ca14706f2c97&oe=6038598F&ig_cache_key=YW5vbnltb3VzX3Byb2ZpbGVfcGlj.2", :size => "88x88", class:"w3-circle w3-center")), controller: 'user', action: 'show', user_id: @owners[post_count].id %>
                 <%end%>
               </p>
             </div>
@@ -39,7 +41,7 @@
             <div class="w3-col m10 l10 s8   w3-left">
               <br>
               <p>
-                <%= link_to (@owners[post_count].email), controller: 'user', action: 'show', id: @owners[post_count].id %>
+                <%= link_to (@owners[post_count].email), controller: 'user', action: 'show', user_id: @owners[post_count].id %>
               </p>
             </div>
 

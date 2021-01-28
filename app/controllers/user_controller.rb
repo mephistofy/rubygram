@@ -11,7 +11,7 @@ class UserController < ApplicationController
           @users = User.all.where.not(id: current_user)
         else 
           if @user.id == current_user.id
-            redirect_to :controller=>'user',:action=>'show',:id=>@user.id
+            redirect_to :controller=>'user',:action=>'show',:user_id=>@user.id
           end
         end
       }
@@ -49,7 +49,7 @@ class UserController < ApplicationController
   def show
     respond_to do |format|
       format.html {
-        @user = User.find(show_params_html[:id])
+        @user = User.find(show_params_html[:user_id])
 
         if @user == nil
           @error = 'No such user!'
@@ -59,7 +59,7 @@ class UserController < ApplicationController
       }
 
       format.json {
-        @user = User.find(show_params_json[:id])
+        @user = User.find(show_params_json[:user_id])
       
         if @user == nil 
           render json: { error: 'No such user!'}, status: 404
@@ -100,8 +100,8 @@ class UserController < ApplicationController
   end
 
   def show_params_html
-    params.require(:id)
-    params.permit(:id)
+    params.require(:user_id)
+    params.permit(:user_id)
   end
 
   def show_params_json

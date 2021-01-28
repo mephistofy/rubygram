@@ -9,37 +9,24 @@ class LikeController < ApplicationController
       like = post.likes.build(user_id: current_user.id)
       
       if like.save!
-        respond_to do |format|
-            format.html {
-              redirect_to controller: 'post', action: 'show', id: post.id
-            }
-            format.json {
-              render json: {}, status: :ok
-            }
-        end
+        action = redirect_to controller: 'post', action: 'show', id: post.id
+        data = nil
+        succesful_response(:ok, action, data)
+  
       else
-        error = 'Like not saved'
+        @error = 'Like not saved'
+        action = redirect_to controller: 'post', action: 'show', id: post.id, error: @error
 
-        respond_to do |format|
-            format.html {
-              redirect_to controller: 'post', action: 'show', id: post.id, error: error
-            }
-            format.json {
-              render json: { error: error }, status: 500 
-            }
-        end   
+        failed_response(@error, 500, action)
+        
       end
     else 
       like.destroy
 
-      respond_to do |format|
-          format.html {
-            redirect_to controller: 'post', action: 'show', id: post.id
-          }
-          format.json {
-            render json: {}, status: :ok
-          }
-      end
+      action = redirect_to controller: 'post', action: 'show', id: post.id
+      data = nil
+      succesful_response(:ok, action, data)
+
     end
   end
   
