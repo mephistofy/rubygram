@@ -1,27 +1,6 @@
 class CommentController < ApplicationController
   before_action :authenticate_user!
 
-  #API GET all_comments
-  def index
-    respond_to do |format|
-      post = Post.find(index_params_json[:post_id])
-      comments = post.comment.limit(index_params_json[:limit]).offset(index_params_json[:offset])
-
-      format.json { 
-        render json: {
-          comments: comments.map {|comment| {
-            id: comment.id,
-            author:  User.find(comment.author_id).map {|user|{
-              user_id: user.id,
-              email: user.email,
-              avatar: user.avatar_url
-            }}
-          }}
-        }
-      }
-    end
-  end
-
   def show
     @comment_id = show_delete_params[:comment_id]
   end
@@ -34,16 +13,16 @@ class CommentController < ApplicationController
 
       if comment.save
 
-        succesful_response(:ok, action_succesfull_response(post.id), nil)
+        action_succesfull_response(post.id)
       else
         @error = comment.errors.full_messages
         
-        failed_response(@error, 500, action_failed_response(post.id))
+        action_failed_response(post.id)
       end
     else
       @error = 'Post not found'
 
-      failed_response(@error, 404, action_failed_response(post.id))
+      action_failed_response(post.id)
     end
   end
 
@@ -58,11 +37,11 @@ class CommentController < ApplicationController
 
   private
   def action_failed_response(id)
-    return redirect_to controller: 'post', action: 'show', id: id, error: @error
+    redirect_to controller: 'post', action: 'show', id: id, error: @error
   end
 
   def action_succesfull_response(id)
-    return redirect_to controller: 'post', action: 'show', id: id
+    redirect_to controller: 'post', action: 'show', id: id
   end
 
   def check_and(method)
@@ -74,24 +53,26 @@ class CommentController < ApplicationController
         comment.comment = update_params[:new_comment]
       
         if comment.save
-          succesful_response(:ok, action_succesfull_response(comment.post_id), nil)
+          action_succesfull_response(comment.post_id)
         else
           @error = comment.errors.full_messages
-          failed_response(@error, 500, action_failed_response(comment.post_id))
+
+          action_failed_response(comment.post_id)
         end
       when 'delete'
         comment.destroy
         
-        succesful_response(:ok, action_succesfull_response(comment.post_id), nil)
+        action_succesfull_response(comment.post_id)
       else
         @error = 'Undefined method'
-        failed_response(@error, 500, action_failed_response(comment.post_id))
+
+        action_failed_response(comment.post_id)
       end
 
     else
       @error = 'Only the same author that left a comment can edit it'
 
-      failed_response(@error, :bad_request, action_failed_response(comment.post_id))
+      action_failed_response(comment.post_id)
     end
   end
 
@@ -108,11 +89,4 @@ class CommentController < ApplicationController
     params.permit(:comment_id)
   end
 
-  def index_params_json
-    params.require(:post_id)
-    params.require(:limit)
-    params.require(:offset)
-
-    params.permit(:post_id, :limit, :offset)
-  end
 end

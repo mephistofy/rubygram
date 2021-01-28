@@ -1,4 +1,6 @@
-class SessionsController < Devise::SessionsController
+class Api::V1::SessionsController < Devise::SessionsController
+  respond_to :json
+
   before_action :find_user, only: :create
 
   def new
@@ -8,12 +10,17 @@ class SessionsController < Devise::SessionsController
     if @user.valid_password?(sign_in_params[:password])
       sign_in "user", @user
       
-      redirect_to feed_url
-      
-    else
-      @error =  'Wrong email or password'
+      data = {
+        user: {
+          id: @user.id
+          email: @user.email, 
+        }
+      }
 
-      render 'new'
+      succesful_response_api(:ok, data)
+
+    else 
+      failed_response(:unauthorized, 'Wrong email or password')
 
     end
   end
@@ -32,9 +39,8 @@ class SessionsController < Devise::SessionsController
     @user = User.find_for_database_authentication(email: sign_in_params[:email])
 
     if @user == nil
-      @error =  'Wrong email or password'
+      failed_response(:unauthorized, 'Wrong email or password')
 
-      render 'new'
     end
   end
 end

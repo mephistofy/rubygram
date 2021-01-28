@@ -1,12 +1,14 @@
-class FollowController < ApplicationController
+class Api::V1::FollowController < ApplicationController
+  respond_to :json
+
   before_action :authenticate_user!
   before_action :find_user
     
   def create
     if current_user.id == @user.id
-      @error = 'You cannot follow/unfollow yourself!' 
+      error = 'You cannot follow/unfollow yourself!' 
 
-      redirect_to controller: 'user', action: 'show', user_id: @user.id, error: @error
+      failed_response(:bad_request, error)
 
     else
       if current_user.following?(@user)
@@ -28,14 +30,22 @@ class FollowController < ApplicationController
   
     when 'followers'
       @result = @user.followers
+
+      data = nil
+
+      succesful_response(:ok, action, data
       
     when 'following'
       @result = @user.following
 
-    else
-      @error = 'Wrong parametr transmitted'
+      data = nil
 
-      redirect_to controller: 'user', action: 'show', user_id: @user.id, error: @error
+      succesful_response(:ok, action, data)
+
+    else
+      error = 'Wrong parametr transmitted'
+
+      failed_response(:bad_request, error)
 
     end
   end
@@ -45,11 +55,14 @@ class FollowController < ApplicationController
   def render_message(status)
 
     if status == true
-      redirect_to controller: 'user', action: 'show', user_id: @user.id
+      data = nil
+
+      succesful_response(:ok, data)
 
     else
-      @error = 'Operation failed'
-      redirect_to controller: 'user', action: 'show', user_id: @user.id, error: @error
+      error = 'Operation failed'
+
+      failed_response(500, error)
 
     end
   end
@@ -61,9 +74,9 @@ class FollowController < ApplicationController
     @user = User.find(params[:user_id])
 
     if @user == nil
-      @error = 'No such user!'
-
-      redirect_to controller: 'user', action: 'show', user_id: current_user.id, error: @error
+      error = 'No such user!'
+     
+      failed_response(404, error)
     end        
   end
 
