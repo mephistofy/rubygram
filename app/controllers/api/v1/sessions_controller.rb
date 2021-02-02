@@ -1,10 +1,9 @@
+# frozen_string_literal: true
+
 class Api::V1::SessionsController < Devise::SessionsController
   respond_to :json
 
   before_action :find_user, only: :create
-
-  def new
-  end
 
   def create 
     if @user.valid_password?(sign_in_params[:password])
@@ -18,7 +17,6 @@ class Api::V1::SessionsController < Devise::SessionsController
       }
 
       succesful_response_api(:ok, data)
-
     else 
       failed_response(:unauthorized, 'Wrong email or password')
 
@@ -40,7 +38,6 @@ class Api::V1::SessionsController < Devise::SessionsController
 
     if @user == nil
       failed_response(:unauthorized, 'Wrong email or password')
-
     end
   end
 end

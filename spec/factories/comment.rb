@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
-    factory :comment do
-      association :post
-   
-      comment { 'fsdfdsfsdfsdfsdfsdf' }
+  factory :comment do
+    association :post
 
-      author_id { 1 }
+    comment { 'fsdfdsfsdfsdfsdfsdf' }
 
-      trait(:with_too_long_text) do 
-        comment { FFaker::String.random(length: 201) }
-      end
+    author_id { 1 }
+
+    trait(:with_too_long_text) do
+      comment { FFaker::String.random(length: 201) }
     end
   end
+end

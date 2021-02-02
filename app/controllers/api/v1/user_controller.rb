@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::V1::UserController < ApplicationController
   respond_to :json
   before_action :authenticate_user!
@@ -18,20 +20,14 @@ class Api::V1::UserController < ApplicationController
       }
 
       succesful_response_api(:ok, data)
-
     else 
-      if user.id == current_user.id
-        failed_response_api(204, 'Same as you!')
-
-      else
-
-        data = {
-          user: {
-            id: user.id,
-            avatar: user.avatar,
-            email: user.email
-          }
-        }
+      data = {
+        user: {
+                id: user.id,
+                avatar: user.avatar,
+                email: user.email
+              }
+      }
 
         succesful_response_api(:ok, data)
         

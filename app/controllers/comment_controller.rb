@@ -1,10 +1,13 @@
+# frozen_string_literal: true
+
 class CommentController < ApplicationController
   before_action :authenticate_user!
 
   def show
     @comment_id = show_params[:comment_id]
   end
-  #POST create_comment
+
+  # POST create_comment
   def create
     post_id = create_params_html[:post_id]
 
@@ -15,7 +18,7 @@ class CommentController < ApplicationController
       action_succesfull_response(post_id)
     else
       error = comment.errors.full_messages
-        
+
       action_failed_response(post_id, error)
     end
   end
@@ -23,9 +26,9 @@ class CommentController < ApplicationController
   def update
     comment = Comment.find(update_params[:comment_id])
 
-    if comment.author_id == current_user.id 
+    if comment.author_id == current_user.id
       comment.comment = update_params[:new_comment]
-      
+
       if comment.save
         action_succesfull_response(comment.post_id)
       else
@@ -38,35 +41,33 @@ class CommentController < ApplicationController
 
       action_failed_response(comment.post_id, error)
     end
-
   rescue ActiveRecord::RecordNotFound
     error = 'Comment not found'
 
-    action_failed_response(update_params[:post_id], error)  
+    action_failed_response(update_params[:post_id], error)
   end
 
-  #DELETE delete_comment
+  # DELETE delete_comment
   def destroy
-    comment = Comment.find(delete_params[:comment_id]) 
+    comment = Comment.find(delete_params[:comment_id])
 
     if comment.author_id == current_user.id
       comment.destroy
-        
+
       action_succesfull_response(comment.post_id)
     else
       error = 'Only the same author that created a comment can delete it'
 
       action_failed_response(comment.post_id, error)
     end
-
-
   rescue ActiveRecord::RecordNotFound
     error = 'Comment not found'
 
-    action_failed_response(delete_params[:post_id], error)  
+    action_failed_response(delete_params[:post_id], error)
   end
 
   private
+
   def action_failed_response(id, error)
     redirect_to controller: 'post', action: 'show', id: id, error: error
   end
@@ -92,5 +93,4 @@ class CommentController < ApplicationController
     params.require(:comment_id)
     params.permit(:comment_id, :post_id)
   end
-
 end

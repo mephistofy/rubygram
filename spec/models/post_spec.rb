@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Post, type: :model do
@@ -11,23 +13,23 @@ RSpec.describe Post, type: :model do
 
   describe 'validations' do
     context 'with right atrributes' do
-      it 'allows to set png file as an image' do 
+      it 'allows to set png file as an image' do
         user = create(:user)
-      
+
         subject.attributes = attributes_for(:post)
         subject.user = user
-  
+
         is_expected.to be_valid
       end
     end
 
     context 'wrong attributes' do
-      it 'does not allow set txt as image' do 
+      it 'does not allow set txt as image' do
         user = create(:user)
-      
+
         subject.attributes = attributes_for(:post, :with_invalid_image)
         subject.user = user
-  
+
         is_expected.to be_invalid
       end
     end

@@ -1,30 +1,26 @@
+# frozen_string_literal: true
+
 class UserController < ApplicationController
   before_action :authenticate_user!
 
-  #search user
+  # search user
   def index
     @user = User.find_by(email: params[:search])
 
-    if @user == nil
+    if @user.nil?
       @users = User.all.where.not(id: current_user)
-
-    else
- 
-      if @user.id == current_user.id
-        redirect_to :controller=>'user',:action=>'show',:user_id=>@user.id
-
-      end
+    elsif @user.id == current_user.id
+      redirect_to controller: 'user', action: 'show', user_id: @user.id
     end
-
   end
 
   def show
     @user = User.find(show_params_html[:user_id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to :controller=>'feed',:action=>'index'
+    redirect_to controller: 'feed', action: 'index'
   end
 
-  private 
+  private
 
   def show_params_html
     params.require(:user_id)
