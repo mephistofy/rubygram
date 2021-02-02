@@ -9,7 +9,7 @@ class UserController < ApplicationController
 
     if @user.nil?
       @users = User.all.where.not(id: current_user)
-    elsif @user.id == current_user.id
+    else
       redirect_to controller: 'user', action: 'show', user_id: @user.id
     end
   end
