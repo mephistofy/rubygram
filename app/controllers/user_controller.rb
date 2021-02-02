@@ -20,15 +20,6 @@ class UserController < ApplicationController
 
   def show
     @user = User.find(show_params_html[:user_id])
-
-    if @user == nil
-      error = 'No such user!'
-
-      redirect_to :back, error: error
-    else
-      @posts = @user.post.all
-    end
-
   end
 
   private 
