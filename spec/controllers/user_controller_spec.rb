@@ -50,5 +50,15 @@ RSpec.describe UserController, type: :controller do
         expect(response).to render_template('show') 
       end 
     end
+
+    context 'user not ound' do    
+      subject { get :show, params: {user_id: user.id + 1} }
+    
+      it 'is expected to render show template' do
+        subject
+            
+        expect(response).to redirect_to(:controller=>'feed',:action=>'index')
+      end 
+    end
   end
 end

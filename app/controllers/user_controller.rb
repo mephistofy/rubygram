@@ -20,6 +20,8 @@ class UserController < ApplicationController
 
   def show
     @user = User.find(show_params_html[:user_id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to :controller=>'feed',:action=>'index'
   end
 
   private 

@@ -98,9 +98,10 @@
 
 
 <%grid_counter = 0%>
-<%posts_count = @posts.count%>
+<%posts = @user.post.all %>
+<%posts_count = posts.count%>
   <div class="w3-row-padding w3-margin-top w3-center">
-<%@posts.each do |post|%>
+<%posts.each do |post|%>
 
     <div class="w3-col s12 m6 l4 w3-center w3-margin-top" >
         <%= link_to (image_tag(post.image_url, :size => "300x350", class: "w3-card-4")), controller: 'post', action: 'show', id: post.id %>

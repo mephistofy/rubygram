@@ -1,7 +1,7 @@
 class PostController < ApplicationController
   before_action :authenticate_user!
   before_action :validate_create_params, only: :create
-  before_action :validate_show_destroy_params, only: [:show, :destroy]
+  before_action :get_post, only: [:show, :destroy]
 
   def new
   end
@@ -38,44 +38,34 @@ class PostController < ApplicationController
 
   #DELETE delete_post
   def destroy
-    if @post.user_id == current_user.id 
+    if @post.user_id == current_user.id
       @post.destroy
-
-      redirect_to 'index'
-    
-    else
-      @error = 'You can destroy only your own posts'
-      
-      render @post
-
     end
+
+    redirect_to controller: 'user', action: 'show', user_id: current_user.id
+
   end
   
   private
-  def validate_show_destroy_params
-    if !params.has_key?(:id)
-      @error = 'You must specify and id param!'
+  def show_destroy_params
+    params.require(:id)
+    params.permit(:id, :error)
+  end
+  
+  def get_post
+    @post = Post.find(show_destroy_params[:id])
+  rescue ActiveRecord::RecordNotFound
+    flash[:notice] = "Wrong post id"
 
-      redirect_to :back, error: @error
-
-    else
-      @post = Post.find(params[:id])
-
-      if @post == nil
-        @error = 'Post not found!'
-
-        redirect_to :back, error: @error
-
-      end
-    end 
-  end 
+    redirect_to :controller=>'feed',:action=>'index'
+     
+  end
 
   def validate_create_params
     if !params.has_key?(:post) && !params.has_key?(:image)
       @error = 'You must select an image!'
 
       render 'new'
-
     end 
   end
 

@@ -137,11 +137,11 @@
       <div class="w3-row">
 
         <div class="w3-col m6 l6 s6 w3-padding-16 w3-margin-left w3-center">        
-          <%= button_to 'Update', {:controller => 'comment', :action => 'show', :comment_id => comment.id}, :method => :get, class: 'w3-button w3-black w3-round-large w3-hover-grey' %>
+          <%= button_to 'Update', {:controller => 'comment', :action => 'show', :comment_id => comment.id, post_id: @post.id}, :method => :get, class: 'w3-button w3-black w3-round-large w3-hover-grey' %>
         </div>
 
         <div class="w3-col m5 l5 s5 w3-padding-16 ">        
-          <%= button_to 'Delete', {:controller => 'comment', :action => 'destroy', :comment_id => comment.id}, :method => :delete, data: { confirm: 'Are you sure?' }, class: 'w3-button w3-black w3-round-large w3-hover-red' %>   
+          <%= button_to 'Delete', {:controller => 'comment', :action => 'destroy', :comment_id => comment.id, post_id: @post.id}, :method => :delete, data: { confirm: 'Are you sure?' }, class: 'w3-button w3-black w3-round-large w3-hover-red' %>   
         </div>
 
       <%end%>

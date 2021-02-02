@@ -1,24 +1,26 @@
 class LikeController < ApplicationController
   before_action :authenticate_user!
 
-  def create 
-    like = Like.find_by(post_id: create_params[:post_id], user_id: current_user.id)
-      
-    post = Post.find(create_params[:post_id])
+  def create
+    post_id = create_params[:post_id] 
+    like = Like.find_by(post_id: post_id, user_id: current_user.id)
+
     if like == nil 
-      like = post.likes.build(user_id: current_user.id)
+      like = Like.new(user_id: current_user.id, post_id: post_id)
       
       if like.save
-        redirect_to controller: 'post', action: 'show', id: post.id
+        redirect_to controller: 'post', action: 'show', id: post_id
       else
         @error = like.errors.full_messages
-        redirect_to controller: 'post', action: 'show', id: post.id, error: @error
+        redirect_to controller: 'post', action: 'show', id: post_id, error: @error
         
       end
     else 
       like.destroy
 
-      redirect_to controller: 'post', action: 'show', id: post.id
+      redirect_to controller: 'post', action: 'show', id: like.post_id
+
+
 
     end
   end

@@ -11,26 +11,16 @@ RSpec.describe RegistrationController, type: :controller do
   end
 
   describe 'create' do
-    #let(:user) { create :user}
-    let(:params) { 
-                   { 
-                      user: { 
-                        email: 'test@xxx',
-                        password: '123456',
-                        password_confirmation: '123456' 
-                      }
-                    } 
-                }
-    let(:wrong_params) { 
-                    { 
-                       user: { 
-                         email: 'test@xxx',
-                         password: '12345fsdf6',
-                         password_confirmation: '1234fdsffff56' 
-                       }
-                     } 
-                 }
     context 'valid action' do
+      let(:params) { 
+        { 
+           user: { 
+             email: 'test@xxx',
+             password: '123456',
+             password_confirmation: '123456' 
+           }
+         } 
+     }
       subject { post :create, params: params}
 
       it 'must redirect to sign in page' do
@@ -41,6 +31,15 @@ RSpec.describe RegistrationController, type: :controller do
     end
 
     context 'render new' do
+      let(:wrong_params) { 
+        { 
+           user: { 
+             email: 'test@xxx',
+             password: '12345fsdf6',
+             password_confirmation: '1234fdsffff56' 
+           }
+         } 
+     }
       it 'if was not saved' do
         post :create, params: wrong_params
 

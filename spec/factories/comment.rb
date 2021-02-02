@@ -7,7 +7,7 @@ FactoryBot.define do
       author_id { 1 }
 
       trait(:with_too_long_text) do 
-        comment { Faker::String.random(length: 201) }
+        comment { FFaker::String.random(length: 201) }
       end
     end
   end
