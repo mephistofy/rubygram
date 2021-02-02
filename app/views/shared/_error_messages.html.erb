@@ -1,0 +1,26 @@
+<% if error != nil %>
+<div class ="w3-center ">
+      <div class="w3-row ">
+        <%if error != nil%>
+          <%case error.class.to_s%>
+          <%when 'String'%>
+            <div class="w3-col s12 m12 l12 w3-black">
+              <%=error%>
+            </div>
+          <%when 'Array'%>
+            <%for i in 0 ... error.size%>
+              <div class="w3-col s12 m12 l12 w3-black">
+                <%=error[i]%>
+              </div>
+            <%end%>
+          <%else%>
+            <div class="w3-col s12 m12 l12 w3-black">
+              <%=error.class%>
+            </div>
+          <%end%>
+          
+          <%end%>
+      </div>
+    </div>
+  
+<% end %>

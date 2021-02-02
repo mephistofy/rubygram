@@ -1,0 +1,104 @@
+<html>
+  <head>
+    <title></title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-ios.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  </head>
+
+  <body>
+        <%= render "shared/error_messages", error: @error %>
+
+          
+    <div class ="w3-display-middle w3-round-xxlarge w3-border w3-ios-red " style="height:348px;width:400px;">    
+      <%= form_for :user, :url => {:controller => :registration, :action => :new} do |f| %>
+
+      <br>
+
+      <div class="w3-row w3-center w3-margin-top">
+
+        <div class="w3-col s1 m1 l1 w3-center ">
+          <p>
+          </p>
+        </div>
+
+        <div class="w3-col s10 m10 l10 w3-center">
+
+          <div class="field w3-center">
+            <%= f.label :email %><br>
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "w3-input w3-round-large" %>
+          </div>
+
+          <br>
+
+          <div class="field w3-center">
+            <%= f.label :password %>
+            <% if @minimum_password_length %>
+              <em>(<%= @minimum_password_length %> characters minimum)</em>
+            <% end %><br />
+            <%= f.password_field :password, autocomplete: "new-password", class: "w3-input w3-round-large" %>
+          </div>
+
+          <br>
+
+          <div class="field w3-center">
+            <%= f.label :password_confirmation %><br />
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "w3-input w3-round-large" %>
+          </div>
+
+          <br>
+          
+          <div class="w3-row w3-center">
+            <div class="w3-col s1 m1 l1 w3-center ">
+              <p>
+              </p>
+            </div>
+            
+            <div class="w3-col s2 m2 l2 w3-center ">
+
+              <div >
+                <label class="btn btn-default btn-change-avatar">
+             
+                     <i class="material-icons w3-xxlarge", id="selected", style= "color: black">add_a_photo</i>
+
+                  <span style="display:none;">
+                    <%= f.file_field :avatar %>
+                  </span>
+                </label>
+
+              </div>
+
+            </div>
+
+            <div class="w3-col s5 m5 l5 w3-center ">
+              <p></p>   
+            </div>
+
+            <div class="w3-col s3 m3 l3 w3-center ">
+
+              <div class="actions w3-center", style>
+                <%= f.submit 'Sign up', class: "w3-button w3-black w3-hover-green w3-round-large", style: "width:100%;" %>
+              </div>
+            </div>
+            
+            <div class="w3-col s1 m1 l1 w3-center ">
+              <p>
+              </p>
+            </div>
+          </div>
+
+          <br>
+          
+        </div>
+
+        <div class="w3-col s1 m1 l1 w3-center">
+        </div>
+          <% end %>
+      </div>
+    </div>
+  </body>
+</html>
+
+
+
+

@@ -1,0 +1,168 @@
+<html>
+  <head>
+    <title></title>
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
+
+  </head>
+
+  <body>
+        <%= render "shared/error_messages", error: @error %>
+
+  <br>
+    <br>
+  <div class="w3-row">
+    
+    <div class="w3-col m1 l1 s1">        
+      <p></p>      
+    </div>
+
+    <div class="w3-col m10 l5 s10 w3-border">                  
+      <%= image_tag(@post.image_url, style: "height:100%;width:100%;") %>        
+    </div>
+
+    <div class="w3-col m11 l5 s12 w3-border">        
+      <div class="w3-row">
+
+        <div class="w3-col m2 l2 s3 w3-margin-left w3-padding-16  ">
+          <%if @owner.avatar_url != nil%> 
+          <%= link_to (image_tag(@owner.avatar_url, :size => "88x88", class:"w3-circle w3-center")), controller: 'user', action: 'show', user_id: @owner.id %>
+          <%else%>
+                      <%= link_to (image_tag("https://scontent-lga3-2.cdninstagram.com/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=scontent-lga3-2.cdninstagram.com&_nc_ohc=d0j1pWabatQAX91cekv&oh=e3ed292241a73c646971ca14706f2c97&oe=6038598F&ig_cache_key=YW5vbnltb3VzX3Byb2ZpbGVfcGlj.2", :size => "88x88", class:"w3-circle w3-center")), controller: 'user', action: 'show', user_id: @owner.id %>
+
+          <%end%>          
+        </div>
+        
+        <div class="w3-col m4 l4 s8  w3-padding-32 ", style="height:122px;">        
+          <%=@owner.email%>      
+        </div>
+
+        <div class="w3-col m3 l3 s4  w3-padding-32  w3-margin-left">        
+          <%if @owner.id != current_user.id%>
+            <% if @followed_by_current_user%>
+              <%= button_to 'Unsubscribe', {:controller => 'follow', :action => 'create', :user_id => @owner.id}, :method => :post, class: 'w3-button w3-red' %>
+            <%else%>
+              <%= button_to 'Subscribe', {:controller => 'follow', :action => 'create', :user_id => @owner.id}, :method => :post, class: 'w3-button w3-black' %>
+            <%end%>
+          <%end%>       
+        </div>
+
+        <div class="w3-col m1 l1 s3 w3-padding-32 ">        
+          <%=@likes_count%>
+          likes         
+        </div>
+        
+        <div class="w3-col m1 l1 s3  w3-padding-32 ">
+          <%if @like == nil%>
+          
+          <label class="btn btn-default btn-change-avatar">            
+            <i class="material-icons w3-xxlarge", id="selected">favorite</i>
+              <span style="display:none;">
+                <%= button_to 'Like', {:controller => 'like', :action => 'create', :post_id => @post.id}, :method => :post, class: 'buttonAddMarkMainPage' %>
+              </span>
+          </label>
+
+          <%else%>
+          
+          <label class="btn btn-default btn-change-avatar">            
+            <i class="material-icons w3-xxlarge", id="selected", style= "color: red">favorite</i>
+              <span style="display:none;">
+                <%= button_to 'Like', {:controller => 'like', :action => 'create', :post_id => @post.id}, :method => :post, class: 'buttonAddMarkMainPage' %>
+              </span>
+          </label>
+
+          <%end%>        
+        </div>
+
+      </div>
+
+      <div class="w3-row">
+      
+        <div class="w3-col m2 l2 s2 ">        
+          <p></p>       
+        </div>
+
+        
+
+        <div class="w3-col m2 l2 s2 ">        
+          <p></p>       
+        </div>
+
+      </div>
+
+      <div class="w3-row">
+        <%= form_for :comment_form, :url => {:controller => :comment, :action => :create} do |f| %>
+         
+
+
+        <div class="w3-col m8 l8 s6 w3-padding-16  w3-margin-left ">        
+          <%= f.hidden_field :post_id, :value => @post.id%>
+          <%= f.text_area :comment, class: "w3-hover-border-black, w3-round-medium", style:"width:100%;"%>       
+        </div>
+        
+        <div class="w3-col m3 l3 s3 w3-padding-16 w3-margin-left">
+          <%= f.submit "Create comment", class: 'w3-button w3-black w3-round-large w3-hover-green' %>
+        </div>
+      
+        <% end %>
+      </div>
+
+      <%@comments.each do |comment|%>
+        <%user = User.find(comment.author_id)%>
+      <div class="w3-row">
+   
+        <div class="w3-col m2 l2 s3 w3-margin-left ">        
+          <%if user.avatar_url != nil%>
+            <%= link_to (image_tag(user.avatar_url, :size => "88x88", class:"w3-circle w3-center")), controller: 'user', action: 'show', user_id: user.id %>
+
+          <%else%>
+            <%= link_to (image_tag("https://scontent-lga3-2.cdninstagram.com/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=scontent-lga3-2.cdninstagram.com&_nc_ohc=d0j1pWabatQAX91cekv&oh=e3ed292241a73c646971ca14706f2c97&oe=6038598F&ig_cache_key=YW5vbnltb3VzX3Byb2ZpbGVfcGlj.2", :size => "88x88", class:"w3-circle w3-center")), controller: 'user', action: 'show', user_id: user.id %>
+          <%end%>     
+        </div>
+
+        <div class="w3-col m4 l4 s4 w3-padding-16 ">        
+          <%=user.email%>
+
+        </div>
+        
+        <div class="w3-col m5 l5 s5 w3-padding-16 ">
+          <%=comment.comment%>
+
+        </div>
+      
+
+
+      </div>
+      <%if comment.author_id == current_user.id%>
+
+      <div class="w3-row">
+
+        <div class="w3-col m6 l6 s6 w3-padding-16 w3-margin-left w3-center">        
+          <%= button_to 'Update', {:controller => 'comment', :action => 'show', :comment_id => comment.id, post_id: @post.id}, :method => :get, class: 'w3-button w3-black w3-round-large w3-hover-grey' %>
+        </div>
+
+        <div class="w3-col m5 l5 s5 w3-padding-16 ">        
+          <%= button_to 'Delete', {:controller => 'comment', :action => 'destroy', :comment_id => comment.id, post_id: @post.id}, :method => :delete, data: { confirm: 'Are you sure?' }, class: 'w3-button w3-black w3-round-large w3-hover-red' %>   
+        </div>
+
+      <%end%>
+
+      <div class="w3-row">
+        <div class="w3-col m12 l12 s12 w3-red">
+        <p><p>
+        </div>        
+      </div>
+
+
+      <%end%>
+
+    </div>
+
+    <div class="w3-col m2 l2 s2 ">        
+    
+    </div>
+
+  </div>
+  <br>
+  <br>
+  </body>
+</html>

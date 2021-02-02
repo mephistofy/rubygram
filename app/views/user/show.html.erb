@@ -1,0 +1,115 @@
+<html>
+
+<head>
+  <title></title>
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
+
+</head>
+
+<body>
+        <%= render "shared/error_messages", error: @error %>
+
+<div class="w3-row">
+<p>
+</p>
+  <div class="w3-col s12 m5 l5 w3-center">
+
+      <% if @user.avatar != nil%>
+        <%= image_tag(@user.avatar_url, :size => "168x168", class:"w3-circle w3-center") %>
+      <%else%>
+        <%= image_tag("https://scontent-lga3-2.cdninstagram.com/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=scontent-lga3-2.cdninstagram.com&_nc_ohc=d0j1pWabatQAX91cekv&oh=e3ed292241a73c646971ca14706f2c97&oe=6038598F&ig_cache_key=YW5vbnltb3VzX3Byb2ZpbGVfcGlj.2", :size => "168x168", class:"w3-round w3-center") %>
+      <%end%>
+
+  </div>
+
+  <div class="w3-col s12 m4 l4 w3-center" >
+    <div class="w3-row w3-center">
+      
+      <div class="w3-col s12 m9 l3  w3-center  ">
+      <br>
+      <br>
+            
+ 
+        <p class=" w3-red w3-round-large", style="width:150px;">
+        <%= @user.email%>
+        </p>
+      </div>
+
+      <div class="w3-col s12 m9 l3  w3-center">
+      <br>
+      <br>
+            
+ 
+        <p>Posts:
+        <%= @user.post.count%>
+        </p>
+      </div>
+      
+      <div class="w3-col s12 m9 l3  w3-center">
+            <br>
+      <br>
+        <p>
+        <%= link_to 'Followers:', {:controller => 'follow', :action => 'index', :user_id => @user.id, :method => 'followers'}, :method => :get %>
+
+        <%= @user.followers.count%>
+        </p>
+      </div>
+      
+      <div class="w3-col s12 m9 l3  w3-center">
+            <br>
+      <br>
+        <p>
+        <%= link_to 'Followings:', {:controller => 'follow', :action => 'index', :user_id => @user.id, :method => 'following'}, :method => :get %>
+
+        <%= @user.following.count%>
+        </p> 
+      </div>
+      
+      <div class="w3-col s12 m9 l3 w3-center">
+            <br>
+      <br>
+      <p>
+        <%if @user.id != current_user.id%>
+          <% if current_user.following?(@user)%>
+            <%= button_to 'Unsubscribe', {:controller => 'follow', :action => 'create', :user_id => @user.id}, :method => :post, class: 'w3-button w3-red' %>
+          <%else%>
+            <%= button_to 'Subscribe', {:controller => 'follow', :action => 'create', :user_id => @user.id}, :method => :post, class: 'w3-button w3-black' %>
+          <%end%>
+        <%end%>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="w3-col s12 m3 l3 w3-center" >
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<%grid_counter = 0%>
+<%posts = @user.post.all %>
+<%posts_count = posts.count%>
+  <div class="w3-row-padding w3-margin-top w3-center">
+<%posts.each do |post|%>
+
+    <div class="w3-col s12 m6 l4 w3-center w3-margin-top" >
+        <%= link_to (image_tag(post.image_url, :size => "300x350", class: "w3-card-4")), controller: 'post', action: 'show', id: post.id %>
+    </div>
+
+
+<%end%>
+  </div>
+</body>
+
+</html>

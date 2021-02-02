@@ -1,0 +1,70 @@
+<html>
+  <head>
+    <title></title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-ios.css">
+  </head>
+
+  <body>
+          <%= render "shared/error_messages", error: @error %>
+
+              <br>
+            <br>
+            <br>
+    <div class ="w3-center ">
+      <div class="w3-row ">
+        <div class="w3-col s1 m4 l4 ">
+          <p>
+          </p>
+        </div>
+        
+        <div class="w3-col s10 m4 l4 ">
+          <%if @result != nil%>
+            <%@result.each do |user|%>
+
+              <div class="w3-row ">
+                
+                <div class="w3-col s6 m6 l6 ">
+
+                  <% if user.avatar != nil%>
+                    <%= image_tag(user.avatar_url, :size => "68x68", class:"w3-circle w3-center") %>
+                  <%else%>
+                    <%= image_tag("https://scontent-lga3-2.cdninstagram.com/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=scontent-lga3-2.cdninstagram.com&_nc_ohc=d0j1pWabatQAX91cekv&oh=e3ed292241a73c646971ca14706f2c97&oe=6038598F&ig_cache_key=YW5vbnltb3VzX3Byb2ZpbGVfcGlj.2", :size => "68x68", class:"w3-round w3-center") %>
+                  <%end%>
+
+                </div>
+                
+                <div class="w3-col s6 m6 l6 w3-margin-top">
+                    <%= link_to "#{user.email}",  {:controller => 'user', :action => 'show', :user_id => user.id}, method: :get, class: "nav-link text-nowrap" %>
+
+                </div>
+
+              </div>
+              <br>
+            <%end%>
+          <%end%>
+        </div>
+        
+        <div class="w3-col s1 m4 l4 ">
+            <p>
+            </p>
+        </div>
+      </div>
+    </div>
+
+  
+
+ 
+
+
+
+
+       
+
+
+
+    
+  </body>
+</html>
+
+
