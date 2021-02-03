@@ -42,7 +42,7 @@ RSpec.describe SessionsController, type: :controller do
   describe 'create' do
     let(:user) { create :user }
 
-    context 'valid action' do
+    context 'must suceed and' do
       let(:params) {
         {
           user: {
@@ -54,14 +54,14 @@ RSpec.describe SessionsController, type: :controller do
 
       subject { post :create, params: params }
 
-      it 'must redirect to feed page' do
+      it 'redirect to feed page' do
         subject
 
         expect(response).to redirect_to('/feed')
       end
     end
 
-    context 'render new' do
+    context 'must fail and render new' do
       let(:params) {
         {
           user: {

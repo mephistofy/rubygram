@@ -38,10 +38,10 @@ RSpec.describe LikeController, type: :controller do
       end
     end
 
-    context 'redirect if error' do
+    context 'redirect if' do
       let(:params) { { post_id: postt.id + 1 } }
 
-      it 'redirects if like not saved' do
+      it 'like not saved' do
         subject
 
         expect(response).to have_http_status(302)

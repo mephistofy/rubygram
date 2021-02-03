@@ -6,6 +6,9 @@ RSpec.describe CommentController, type: :controller do
   let(:user1) { create(:user) }
   let(:comment) { create(:comment) }
 
+  let(:set_comment_author) { comment.author_id = user1.id }
+  let(:save_comment) { comment.save }
+
   before(:each) do
     @request.env['devise.mapping'] = Devise.mappings[:user]
 
@@ -29,10 +32,10 @@ RSpec.describe CommentController, type: :controller do
 
     subject { post :create, params: params }
 
-    context 'succesful action' do
+    context 'must SUCCEED and redirect to post page' do
       let(:params) { { comment_form: { comment: 'fsdfdsf', post_id: postt.id } } }
 
-      it 'must redirect to post page' do
+      it 'if evything is ok' do
         comment.post_id = postt.id
         comment.author_id = user1.id
 
@@ -42,16 +45,16 @@ RSpec.describe CommentController, type: :controller do
       end
     end
 
-    context 'failed action' do
+    context 'must FAIL and redirect to post page' do
       let(:params) { { comment_form: { comment: nil, post_id: postt.id } } }
 
-      it 'must redirect to post page' do
+      it 'if comment param is nil' do
         comment.post_id = postt.id
         comment.author_id = user1.id
 
         subject
 
-        expect(response).to have_http_status(302)
+        expect(response).to have_http_status(:found)
       end
     end
   end
@@ -59,22 +62,48 @@ RSpec.describe CommentController, type: :controller do
   describe 'update' do
     let(:postt) { create(:post) }
 
-    context 'action' do
-      let(:params1) { { comment: { comment_id: comment.id + 1, new_comment: 'fdfdfd', post_id: postt.id } } }
-      let(:params2) { { comment: { comment_id: comment.id, new_comment: 'fdfdfd', post_id: postt.id } } }
+    subject { expect(response).to have_http_status(:found) }
 
-      it 'must fail and redirect if comment not found' do
-        put :update, params: params1
+    context 'must fail and redirect ' do
+      let(:params_unknown_comment) { { comment: { comment_id: comment.id + 1, new_comment: 'fdfdfd', post_id: postt.id } } }
+      let(:params_nil_new_comment) { { comment: { comment_id: comment.id, new_comment: nil, post_id: postt.id } } }
 
-        expect(response).to have_http_status(302)
+      it 'if comment not found' do
+        put :update, params: params_unknown_comment
+
+        subject
       end
 
-      it 'must fail and redirect if author is not the same' do
+      it 'if author is not the same' do
         comment.author_id = user1.id + 1
 
-        put :update, params: params2
+        put :update, params: params_nil_new_comment
 
-        expect(response).to have_http_status(302)
+        subject
+      end
+
+      it 'if comment not saved' do
+        set_comment_author
+        save_comment
+
+        put :update, params: params_nil_new_comment
+
+        subject
+      end
+    end
+
+    context 'must succeed' do
+      before(:each) do
+        set_comment_author
+        save_comment
+      end
+
+      let(:params) { { comment: { comment_id: comment.id, new_comment: 'fdfdfdf', post_id: postt.id } } }
+
+      it 'if everythinh is ok' do
+        put :update, params: params
+
+        subject
       end
     end
   end
@@ -82,22 +111,36 @@ RSpec.describe CommentController, type: :controller do
   describe 'delete' do
     let(:postt) { create(:post) }
 
-    context 'action' do
-      let(:params1) { { comment_id: comment.id + 1, post_id: postt.id } }
-      let(:params2) { { comment_id: comment.id, post_id: postt.id } }
+    let(:params2) { { comment_id: comment.id, post_id: postt.id } }
 
-      it 'must fail and redirect if comment not found' do
+    subject { expect(response).to have_http_status(:found) }
+
+    context 'must fail and redirect if ' do
+      let(:params1) { { comment_id: comment.id + 1, post_id: postt.id } }
+
+      it 'comment not found' do
         delete :destroy, params: params1
 
-        expect(response).to have_http_status(302)
+        subject
       end
 
-      it 'must fail and redirect if author is not the same' do
+      it 'author is not the same' do
         comment.author_id = user1.id + 1
 
         delete :destroy, params: params2
 
-        expect(response).to have_http_status(302)
+        subject
+      end
+    end
+
+    context 'must succeed and redirect if ' do
+      it 'everything is ok' do
+        set_comment_author
+        save_comment
+
+        delete :destroy, params: params2
+
+        subject
       end
     end
   end

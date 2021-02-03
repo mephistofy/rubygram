@@ -14,13 +14,7 @@
 <p>
 </p>
   <div class="w3-col s12 m5 l5 w3-center">
-
-      <% if @user.avatar != nil%>
-        <%= image_tag(@user.avatar_url, :size => "168x168", class:"w3-circle w3-center") %>
-      <%else%>
-        <%= image_tag("https://scontent-lga3-2.cdninstagram.com/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=scontent-lga3-2.cdninstagram.com&_nc_ohc=d0j1pWabatQAX91cekv&oh=e3ed292241a73c646971ca14706f2c97&oe=6038598F&ig_cache_key=YW5vbnltb3VzX3Byb2ZpbGVfcGlj.2", :size => "168x168", class:"w3-round w3-center") %>
-      <%end%>
-
+    <%= image_tag(@user.avatar_url, :size => "168x168", class:"w3-circle w3-center") %>
   </div>
 
   <div class="w3-col s12 m4 l4 w3-center" >
@@ -86,17 +80,6 @@
   </div>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
 <%grid_counter = 0%>
 <%posts = @user.post.all %>
 <%posts_count = posts.count%>
@@ -106,7 +89,6 @@
     <div class="w3-col s12 m6 l4 w3-center w3-margin-top" >
         <%= link_to (image_tag(post.image_url, :size => "300x350", class: "w3-card-4")), controller: 'post', action: 'show', id: post.id %>
     </div>
-
 
 <%end%>
   </div>

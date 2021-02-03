@@ -6,23 +6,14 @@ class RegistrationController < ApplicationController
 
   # POST /sign_up
   def create
-    @user = User.find_by(email: params[:email])
+    user = User.new(registration_params)
 
-    if !@user.nil?
-      @error = 'User already exists!'
+    if user.save
+      redirect_to sign_in_path
+    else
+      @error = user.errors.full_messages
 
       render 'new'
-    else
-      user = User.new(registration_params)
-
-      if user.save
-        redirect_to sign_in_path
-
-      else
-        @error = user.errors.full_messages
-
-        render 'new'
-      end
     end
   end
 

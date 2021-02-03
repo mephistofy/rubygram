@@ -80,14 +80,12 @@ RSpec.describe FollowController, type: :controller do
   describe 'find user' do
     let(:show_params) { { method: 'fdfdf', user_id: user2.id + 1 } }
 
-    context 'user' do
-      subject { get :index, params: show_params }
+    subject { get :index, params: show_params }
 
-      it 'not found' do
-        subject
+    it 'not found' do
+      subject
 
-        expect(response).to have_http_status(302)
-      end
+      expect(response).to have_http_status(:found)
     end
   end
 end

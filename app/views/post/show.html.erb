@@ -24,12 +24,7 @@
       <div class="w3-row">
 
         <div class="w3-col m2 l2 s3 w3-margin-left w3-padding-16  ">
-          <%if @owner.avatar_url != nil%> 
-          <%= link_to (image_tag(@owner.avatar_url, :size => "88x88", class:"w3-circle w3-center")), controller: 'user', action: 'show', user_id: @owner.id %>
-          <%else%>
-                      <%= link_to (image_tag("https://scontent-lga3-2.cdninstagram.com/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=scontent-lga3-2.cdninstagram.com&_nc_ohc=d0j1pWabatQAX91cekv&oh=e3ed292241a73c646971ca14706f2c97&oe=6038598F&ig_cache_key=YW5vbnltb3VzX3Byb2ZpbGVfcGlj.2", :size => "88x88", class:"w3-circle w3-center")), controller: 'user', action: 'show', user_id: @owner.id %>
-
-          <%end%>          
+          <%= link_to (image_tag(@owner.avatar_url, :size => "88x88", class:"w3-circle w3-center")), controller: 'user', action: 'show', user_id: @owner.id %>          
         </div>
         
         <div class="w3-col m4 l4 s8  w3-padding-32 ", style="height:122px;">        
@@ -92,8 +87,6 @@
       <div class="w3-row">
         <%= form_for :comment_form, :url => {:controller => :comment, :action => :create} do |f| %>
          
-
-
         <div class="w3-col m8 l8 s6 w3-padding-16  w3-margin-left ">        
           <%= f.hidden_field :post_id, :value => @post.id%>
           <%= f.text_area :comment, class: "w3-hover-border-black, w3-round-medium", style:"width:100%;"%>       
@@ -101,9 +94,14 @@
         
         <div class="w3-col m3 l3 s3 w3-padding-16 w3-margin-left">
           <%= f.submit "Create comment", class: 'w3-button w3-black w3-round-large w3-hover-green' %>
-        </div>
-      
+        </div>      
         <% end %>
+      <%if @post.user_id == current_user.id%>
+        <div class="w3-col m3 l3 s3 w3-padding-16 w3-margin-left">
+          <%= button_to 'Delete Post', {:controller => 'post', :action => 'destroy', :id => @post.id}, :method => :delete, data: { confirm: 'Are you sure?' }, class: 'w3-button w3-black w3-round-large w3-hover-red' %>   
+        </div>
+      <%end%>
+
       </div>
 
       <%@comments.each do |comment|%>
@@ -111,12 +109,8 @@
       <div class="w3-row">
    
         <div class="w3-col m2 l2 s3 w3-margin-left ">        
-          <%if user.avatar_url != nil%>
-            <%= link_to (image_tag(user.avatar_url, :size => "88x88", class:"w3-circle w3-center")), controller: 'user', action: 'show', user_id: user.id %>
-
-          <%else%>
-            <%= link_to (image_tag("https://scontent-lga3-2.cdninstagram.com/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=scontent-lga3-2.cdninstagram.com&_nc_ohc=d0j1pWabatQAX91cekv&oh=e3ed292241a73c646971ca14706f2c97&oe=6038598F&ig_cache_key=YW5vbnltb3VzX3Byb2ZpbGVfcGlj.2", :size => "88x88", class:"w3-circle w3-center")), controller: 'user', action: 'show', user_id: user.id %>
-          <%end%>     
+          <%= link_to (image_tag(user.avatar_url, :size => "88x88", class:"w3-circle w3-center")), controller: 'user', action: 'show', user_id: user.id %>
+    
         </div>
 
         <div class="w3-col m4 l4 s4 w3-padding-16 ">        

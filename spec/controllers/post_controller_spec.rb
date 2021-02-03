@@ -34,16 +34,16 @@ RSpec.describe PostController, type: :controller do
       end
     end
 
-    context 'if fail' do
+    context 'must render new if fail' do
       let(:params) { { postt: { image: nil } } }
       let(:wrong_params) { { post: { image: Rack::Test::UploadedFile.new(Rails.root.join('spec/fixtures/ruby.txt')) } } }
 
-      it 'and no post or image param must render new' do
+      it 'and no post or image param' do
         post :create, params: params
 
         expect(response).to render_template('new')
       end
-      it 'and wrong params must render new' do
+      it 'and params are wrong' do
         post :create, params: wrong_params
 
         expect(response).to render_template('new')
@@ -56,20 +56,27 @@ RSpec.describe PostController, type: :controller do
     context 'if post found' do
       subject { get :show, params: { id: post.id } }
 
-      it 'is expected to render show template' do
+      it 'must render show template' do
         subject
 
         expect(response).to render_template('show')
       end
     end
 
-    context 'if fail' do
-      subject { get :show, params: { id: post.id + 1 } }
+    context 'if there are any errors' do
+      let(:param_with_error) { { id: post.id, error: 'fsdfsdf' } }
+      let(:param_with_invalid_post_number) { { id: post.id + 1, error: 'fsdfsdf' } }
 
-      it 'is expected to redirect to feed' do
-        subject
+      it 'must render error' do
+        get :show, params: param_with_error
 
-        expect(response).to have_http_status(302)
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'must redirect to feed' do
+        get :show, params: param_with_invalid_post_number
+
+        expect(response).to have_http_status(:found)
       end
     end
   end
@@ -77,11 +84,18 @@ RSpec.describe PostController, type: :controller do
   describe 'destroy' do
     let(:post) { create(:post) }
 
-    context 'if successfull' do
-      let(:subject) { delete :destroy, params: { id: post.id } }
+    context 'must' do
+      subject { delete :destroy, params: { id: post.id } }
 
-      it 'must redirect to index' do
+      it 'redirect to index' do
+        subject
+
+        expect(response).to redirect_to(controller: 'user', action: 'show', user_id: user.id)
+      end
+
+      it 'delete post if current user' do
         post.user_id = user.id
+        post.save
 
         subject
 
