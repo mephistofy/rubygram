@@ -6,11 +6,11 @@
   </head>
 
   <body>
-          <%= render "shared/error_messages", error: @error %>
-
-              <br>
-            <br>
-            <br>
+    <%= render "shared/error_messages", error: @error %>
+    <br>
+    <br>
+    <br>
+    
     <div class ="w3-center ">
       <div class="w3-row ">
         <div class="w3-col s1 m4 l4 ">
@@ -19,22 +19,22 @@
         </div>
         
         <div class="w3-col s10 m4 l4 ">
-          <%if @user == nil%>
-            <%@users.each do |user|%>
+          <div class="w3-center">
+            Search results:
+          <div>
 
-              <div class="w3-row ">
+          <%@users.each do |user|%>
+          <div class="w3-row ">
+            <div class="w3-col s6 m6 l6 ">
+              <%= image_tag(user.avatar_url, :size => "68x68", class:"w3-circle w3-center") %>
+            </div>
                 
-                <div class="w3-col s6 m6 l6 ">
-                  <%= image_tag(user.avatar_url, :size => "68x68", class:"w3-circle w3-center") %>
-                </div>
-                
-                <div class="w3-col s6 m6 l6 w3-margin-top">
-                    <%= link_to "#{user.email}", "user/#{user.id}", method: :get, class: "nav-link text-nowrap" %>
-                </div>
+            <div class="w3-col s6 m6 l6 w3-margin-top">
+              <%= link_to "#{user.email}", "user/#{user.id}", method: :get, class: "nav-link text-nowrap" %>
+            </div>
+          </div>
 
-              </div>
-              <br>
-            <%end%>
+          <br>
           <%end%>
         </div>
         
@@ -44,19 +44,6 @@
         </div>
       </div>
     </div>
-
-  
-
- 
-
-
-
-
-       
-
-
-
-    
   </body>
 </html>
 

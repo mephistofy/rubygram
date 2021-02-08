@@ -86,6 +86,7 @@ yarn-debug.log*
 # Ignore uploaded files in development.
 /storage/*
 !/storage/.keep
+/public/uploads
 
 /public/assets
 .byebug_history

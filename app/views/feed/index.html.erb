@@ -1,72 +1,61 @@
 <html>
+  <head>
+    <title></title>
+      <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
+  </head>
 
-<head>
-  <title></title>
+  <body>
+    <%= render "shared/error_messages", error: @error %>
 
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
-
-</head>
-
-<body>
-        <%= render "shared/error_messages", error: @error %>
-
-<div >
-<% if @followings_posts != nil%>
-  <%post_count = 0 %>
-  <%@followings_posts.each do |post|%>
-  <div class="w3-row ">
-    <div class="w3-col m2 l2 s2 ">
-    <p>
-    </p>
-    </div>
-
-    <div class="w3-col m8 l8 s8 ">
-      
-      <div class="w3-row  ">
-        
-        <div class="w3-col m12 l12 s12 w3-display-container">
-          
+    <div >
+      <% if @followings_posts.size != nil%>
+        <%post_count = 0 %>
+        <%@followings_posts.each do |post|%>
           <div class="w3-row ">
-            
-            <div class="w3-col m2 l2 s4  w3-center ">
+            <div class="w3-col m2 l2 s2 ">
               <p>
-                  <%= link_to (image_tag(@owners[post_count].avatar_url, :size => "88x88", class:"w3-circle w3-center")), controller: 'user', action: 'show', user_id: @owners[post_count].id %>
-              </p>
+             </p>
             </div>
 
-            <div class="w3-col m10 l10 s8   w3-left">
-              <br>
-              <p>
-                <%= link_to (@owners[post_count].email), controller: 'user', action: 'show', user_id: @owners[post_count].id %>
-              </p>
+            <div class="w3-col m8 l8 s8 ">
+              <div class="w3-row  ">
+                <div class="w3-col m12 l12 s12 w3-display-container">
+                  <div class="w3-row ">
+                    <div class="w3-col m2 l2 s4  w3-center ">
+                      <p>
+                        <%= link_to (image_tag(@owners[post_count].avatar_url, :size => "88x88", class:"w3-circle w3-center")), controller: 'user', action: 'show', user_id: @owners[post_count].id %>
+                      </p>
+                    </div>
+
+                    <div class="w3-col m10 l10 s8   w3-left">
+                      <br>
+                      <p>
+                        <%= link_to (@owners[post_count].email), controller: 'user', action: 'show', user_id: @owners[post_count].id %>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="w3-col m12 l12 s12 ">
+                  <div class="w3-col m12 l12 s12 w3-border">
+                    <div>
+                      <%= link_to (image_tag post.image_url, style: "height:100%;width:100%;"), controller: 'post', action: 'show', id: post.id %>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
+            <div class="w3-col m2 l2 s2 w3-blue">
+            </div>
           </div>
-        </div>
-
-        <div class="w3-col m12 l12 s12 ">
-          <div class="w3-col m12 l12 s12 w3-border">
-            <div>
-              <%= link_to (image_tag post.image_url, style: "height:100%;width:100%;"), controller: 'post', action: 'show', id: post.id %>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="w3-col m2 l2 s2 w3-blue">
-    
-    </div>
-  </div>
  
-  <%post_count += 1%>
-  <%end%>
-<%end%>
-</div>
-
-</body>
-
+          <%post_count += 1%>
+        <%end%>
+      <%else%>
+        <div class="w3-display-middle">Users you follow have no posts</div>
+      <%end%>
+    </div>
+  </body>
 </html>
 
