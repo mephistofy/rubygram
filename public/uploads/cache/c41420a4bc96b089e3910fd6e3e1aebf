@@ -1,6 +1,0 @@
-#/bin/bash
-while true
-do
-sudo ifconfig enp5s0 up 
-sleep 600
-done 
